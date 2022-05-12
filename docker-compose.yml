@@ -1,27 +1,27 @@
 version: '3.3'
 
 services:
-  dbAvatar:
-    container_name: "dbAvatar"
-    image: postgres:14.2-alpine
-    restart: always
-    env_file:
-        - ./.env-dev
-    volumes:
-        - ./data/pg_data:/var/lib/postgresql/data
-    ports:
-        - "5432:5432"
-        
-  avatar:
-    container_name: "avatar"
-    build:
-        context: .
-        dockerfile: ./Dev.dockerfile
-    env_file:
-        - ./.env-dev
-    volumes:
-      - ./data/avatars:/avatar/avatars
-    depends_on:
-        - dbAvatar
-    ports:
-        - "8087:8087"
+    dbAvatar:
+        container_name: "dbAvatar"
+        image: postgres:14.2-alpine
+        restart: always
+        env_file:
+            - ./.env-dev
+        volumes:
+            - ./data/pg_data:/var/lib/postgresql/data
+        ports:
+            - "5433:5433"
+
+    avatar:
+        container_name: "avatar"
+        build:
+            context: .
+            dockerfile: ./Dev.dockerfile
+        env_file:
+            - ./.env-dev
+        volumes:
+            - ./data/avatars:/avatar/avatars
+        depends_on:
+            - dbAvatar
+        ports:
+            - "8087:8087"
