@@ -2,7 +2,7 @@ ARG GO_VERSION=1.18.1
 FROM golang:${GO_VERSION}-alpine as avatar-deps
 WORKDIR /avatar
 COPY . .
-#FROM avatar-deps as avatar-builder
+RUN go mod tidy
 RUN go build -buildvcs=false -o avatar .
 
 
