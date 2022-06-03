@@ -5,20 +5,31 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
+	"time"
 )
 
 var db *sql.DB
 
 func init() {
 	var err error
-	db, err = sql.Open("postgres", conf.ConnString)
-	_, err = db.Exec("CREATE TABLE IF NOT EXISTS avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, user_id BIGINT UNIQUE, src_path TEXT);")
-	if err != nil {
-		log.Fatal("Cant' create table")
-		return
+	for {
+		db, err = sql.Open("postgres", conf.ConnString)
+		if err == nil {
+			break
+		}
+		log.Println(err)
+		log.Println("Can't open connection with db\nTry again in 5s")
+		time.Sleep(5 * time.Second)
 	}
-	log.Println("Created")
-	if err != nil {
-		log.Fatalln(err)
+
+	for {
+		_, err = db.Exec("CREATE TABLE IF NOT EXISTS avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, user_id BIGINT UNIQUE, src_path TEXT);")
+		if err == nil {
+			log.Println("Table `avatar` created")
+			break
+		}
+		log.Println(err)
+		log.Println("Cant' create table `avatar`\nTry again in 5s")
+		time.Sleep(5 * time.Second)
 	}
 }
