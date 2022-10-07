@@ -1,34 +1,50 @@
 package conf
 
 import (
+	"fmt"
 	"log"
 	"os"
+
+	"github.com/joho/godotenv"
 )
 
-var dbUser = os.Getenv("DB_AVATAR_USER")
-var dbPsw = os.Getenv("DB_AVATAR_PSW")
-var DBName = os.Getenv("DB_AVATAR_DBNAME")
-var dbSslmode = os.Getenv("DB_AVATAR_SSL")
-var dbHostname = os.Getenv("DB_AVATAR_HOSTNAME")
-var dbPort = os.Getenv("DB_AVATAR_PORT")
+func checkEnvExists(envname string) string {
+	val := os.Getenv(envname)
+	log.Printf("%s = %s\n", envname, val)
+	if val == "" {
+		log.Fatalf("Environment variable `%s` must be specified and must be non empty value", envname)
+	}
+	return val
+}
+
+var dbUser string
+var dbPsw string
+var DBName string
+var dbSslmode string
+var dbHostname string
+var dbPort string
+var ConnString string
 
 func init() {
-	if dbUser == "" {
-		log.Fatal("environment variable `DB_USER` must be specified and must be non empty value")
+	var err = godotenv.Load()
+
+	if err != nil {
+		log.Fatalf("Read env file error")
 	}
-	if dbPsw == "" {
-		log.Fatal("environment variable `DB_PSW` must be specified and must be non empty value")
-	}
-	if DBName == "" {
-		log.Fatal("environment variable `DB_NAME` must be specified and must be non empty value")
-	}
-	if dbSslmode == "" {
-		log.Fatal("environment variable `DB_SSL` must be specified and must be non empty value")
-	}
-	if dbHostname == "" {
-		log.Fatal("environment variable `DB_AVATAR_HOSTNAME` must be specified and must be non empty value")
-	}
-	if dbPort == "" {
-		log.Fatal("environment variable `DB_AVATAR_PORT` must be specified and must be non empty value")
-	}
+
+	dbUser = checkEnvExists("POSTGRES_USER")
+	dbPsw = checkEnvExists("POSTGRES_PASSWORD")
+	dbHostname = checkEnvExists("DB_AVATAR_HOSTNAME")
+	DBName = checkEnvExists("POSTGRES_DB")
+	dbPort = checkEnvExists("PGPORT")
+	dbSslmode = checkEnvExists("DB_AVATAR_SSL")
+
+	ConnString = fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		dbHostname,
+		dbUser,
+		dbPsw,
+		DBName,
+		dbPort,
+		dbSslmode)
 }

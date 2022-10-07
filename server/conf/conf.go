@@ -6,13 +6,12 @@ import (
 )
 
 var baseDir, _ = os.Getwd()
-var BaseAvatarPath string = baseDir + "/avatars/"
+var BaseAvatarPath string = baseDir + "/avatars"
 
 // MaxAvatarMiBSize 4 MB
 const MaxAvatarMiBSize = 4
 
 var ServiceAvatarPort = os.Getenv("SERVICE_AVATAR_PORT")
-var AllowedHosts = []string{"0.0.0.0"}
 
 func init() {
 	if ServiceAvatarPort == "" {

@@ -24,3 +24,5 @@ go.sum
 
 # data
 data
+
+.env

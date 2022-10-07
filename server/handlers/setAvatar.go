@@ -34,28 +34,30 @@ func SetAvatar(c *gin.Context) {
 		log.Println(err.Error())
 		return
 	}
-	dirPath := conf.BaseAvatarPath + filename[0:2] + "/" + filename[2:4] + "/"
+
+	dirPrefix := filename[0:2] + "/" + filename[2:4] + "/"
+	dirPath := conf.BaseAvatarPath + "/" + dirPrefix
 	err = os.MkdirAll(dirPath, os.ModePerm)
 	if err != nil {
 		log.Println(err.Error())
 		return
 	}
-	fullPath := dirPath + filename
+	fullPathToSaveFile := dirPath + filename
 
 	// save on disk
-	err = c.SaveUploadedFile(requestBody.Avatar, fullPath)
+	err = c.SaveUploadedFile(requestBody.Avatar, fullPathToSaveFile)
 	if err != nil {
 		log.Println(err.Error())
 		return
 	}
 
 	// save in db
-	err = db.SetSrcPath(requestBody.ID, fullPath)
+	err = db.SetSrcPath(requestBody.ID, dirPrefix+filename)
 	if err != nil {
 		log.Println(err.Error())
 		return
 	}
 
 	responseStatus = http.StatusOK
-	responseBody = gin.H{"avatar": fullPath}
+	responseBody = gin.H{"avatarSrc": fullPathToSaveFile}
 }
