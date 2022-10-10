@@ -8,6 +8,8 @@ import (
 var baseDir, _ = os.Getwd()
 var BaseAvatarPath string = baseDir + "/avatars"
 
+const UserIdHeader = "X-User-Identity"
+
 // MaxAvatarMiBSize 4 MB
 const MaxAvatarMiBSize = 4
 

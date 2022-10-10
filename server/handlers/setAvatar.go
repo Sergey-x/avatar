@@ -4,6 +4,7 @@ import (
 	"avatar.com/avatar/db"
 	"avatar.com/avatar/server/conf"
 	"avatar.com/avatar/server/schemas"
+	"avatar.com/avatar/server/utils"
 	"github.com/gin-gonic/gin"
 	nanoid "github.com/matoous/go-nanoid/v2"
 	"log"
@@ -44,6 +45,13 @@ func SetAvatar(c *gin.Context) {
 	}
 	fullPathToSaveFile := dirPath + filename
 
+	// get user id from http header
+	var userId uint64 = utils.GetUserIdFromHeader(c)
+	if userId == 0 {
+		log.Println("User id = 0")
+		return
+	}
+
 	// save on disk
 	err = c.SaveUploadedFile(requestBody.Avatar, fullPathToSaveFile)
 	if err != nil {
@@ -52,7 +60,7 @@ func SetAvatar(c *gin.Context) {
 	}
 
 	// save in db
-	err = db.SetSrcPath(requestBody.ID, dirPrefix+filename)
+	err = db.SetSrcPath(userId, dirPrefix+filename)
 	if err != nil {
 		log.Println(err.Error())
 		return
