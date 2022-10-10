@@ -10,6 +10,7 @@ func setRoutes(router *gin.Engine) *gin.Engine {
 	{
 		v1.GET("/avatar", handlers.GetAvatarPath)
 		v1.POST("/avatar", handlers.SetAvatar)
+		v1.DELETE("/avatar", handlers.DeleteAvatar)
 	}
 
 	return router
