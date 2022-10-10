@@ -14,7 +14,7 @@ func SetupServer() *gin.Engine {
 	// Set paths to handler functions
 	r = setRoutes(r)
 
-	// Set a lower memory limit for multipart forms (щмуккшву default 32 MB)
+	// Set a lower memory limit for multipart forms (override default 32 MB)
 	r.MaxMultipartMemory = conf.MaxAvatarMiBSize << 20
 
 	return r
