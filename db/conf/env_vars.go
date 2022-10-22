@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	"github.com/joho/godotenv"
 )
 
 func checkEnvExists(envname string) string {
@@ -26,12 +24,6 @@ var dbPort string
 var ConnString string
 
 func init() {
-	var err = godotenv.Load()
-
-	if err != nil {
-		log.Fatalf("Read env file error")
-	}
-
 	dbUser = checkEnvExists("POSTGRES_USER")
 	dbPsw = checkEnvExists("POSTGRES_PASSWORD")
 	dbHostname = checkEnvExists("DB_AVATAR_HOSTNAME")
