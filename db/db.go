@@ -10,10 +10,13 @@ import (
 
 var db *sql.DB
 
-func init() {
+const UserAvatarTableName = "avatar"
+const TeamAvatarTableName = "team_avatar"
+
+func openConn(driverName string, connString string) {
 	var err error
 	for {
-		db, err = sql.Open("postgres", conf.ConnString)
+		db, err = sql.Open(driverName, connString)
 		if err == nil {
 			break
 		}
@@ -21,15 +24,23 @@ func init() {
 		log.Println("Can't open connection with db\nTry again in 5s")
 		time.Sleep(5 * time.Second)
 	}
+}
 
+func initCreateTable(tableName string, query string) {
 	for {
-		_, err = db.Exec("CREATE TABLE IF NOT EXISTS avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, user_id BIGINT UNIQUE, src_path TEXT);")
+		_, err := db.Exec(query)
 		if err == nil {
-			log.Println("Table `avatar` created")
+			log.Printf("Table `%s` created\n", tableName)
 			break
 		}
 		log.Println(err)
-		log.Println("Cant' create table `avatar`\nTry again in 5s")
+		log.Printf("Cant' create table `%s`\nTry again in 5s\n", tableName)
 		time.Sleep(5 * time.Second)
 	}
+}
+
+func init() {
+	openConn("postgres", conf.ConnString)
+	initCreateTable(UserAvatarTableName, "CREATE TABLE IF NOT EXISTS avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, user_id BIGINT UNIQUE, src_path TEXT);")
+	initCreateTable(TeamAvatarTableName, "CREATE TABLE IF NOT EXISTS team_avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, team_id BIGINT UNIQUE, src_path TEXT);")
 }

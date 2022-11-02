@@ -2,6 +2,7 @@ package conf
 
 import (
 	"fmt"
+	"github.com/joho/godotenv"
 	"log"
 	"os"
 )
@@ -24,6 +25,12 @@ var dbPort string
 var ConnString string
 
 func init() {
+	// Load the .env file in the current directory
+	envErr := godotenv.Load()
+	if envErr != nil {
+		log.Println(".env file not found, load vars from session")
+	}
+
 	dbUser = checkEnvExists("POSTGRES_USER")
 	dbPsw = checkEnvExists("POSTGRES_PASSWORD")
 	dbHostname = checkEnvExists("DB_AVATAR_HOSTNAME")
