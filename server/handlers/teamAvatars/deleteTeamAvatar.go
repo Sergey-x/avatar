@@ -20,7 +20,6 @@ func DeleteTeamAvatar(c *gin.Context) {
 		return
 	}
 
-	// TODO: check user part-------------
 	teamIdStr := c.Param(TeamIdParamName)
 	teamId, err := strconv.ParseUint(teamIdStr, 10, 64)
 	if err != nil {
@@ -28,10 +27,14 @@ func DeleteTeamAvatar(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Incorrect type of `%s` (should be uint64)", TeamIdParamName)})
 		return
 	}
-	log.Println(teamId)
-	// TODO: check user part------------
 
-	e := db.DeleteTeamSrcPath(userId)
+	isUserMember := utils.CheckUserIsMemberOfTeam(userId, teamId)
+	if isUserMember == false {
+		c.JSON(http.StatusForbidden, gin.H{"Detail": "Permission denied"})
+		return
+	}
+
+	e := db.DeleteTeamSrcPath(teamId)
 	if e != nil {
 		c.JSON(http.StatusNotFound, gin.H{"Detail": "Аватар не сущетсвует"})
 		return

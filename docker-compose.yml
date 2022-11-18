@@ -1,0 +1,40 @@
+version: '3.3'
+
+services:
+  dbAvatar:
+    container_name: "dbAvatar"
+    image: postgres:14.2-alpine
+    restart: always
+    environment:
+      - DB_AVATAR_SSL
+      - POSTGRES_DB
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - PGPORT
+    env_file:
+      - .env
+    volumes:
+      - avatar_postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"
+
+  avatar:
+    container_name: "avatar"
+    build:
+      context: .
+    environment:
+      - DB_AVATAR_HOSTNAME=dbAvatar
+      - DB_AVATAR_SSL
+      - SERVICE_AVATAR_PORT=8087
+      - AVATAR_IMAGES_DIR=/mediafiles
+    env_file:
+      - .env
+    ports:
+      - "8087:8087"
+    volumes:
+      - avatar_images_volume:/mediafiles
+
+volumes:
+  avatar_postgres_data:
+  avatar_images_volume:
+  client_static_volume:
