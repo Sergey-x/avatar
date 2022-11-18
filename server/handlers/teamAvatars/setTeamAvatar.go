@@ -54,8 +54,6 @@ func SetTeamAvatar(c *gin.Context) {
 		return
 	}
 
-	// TODO: check that user is participant of specified team
-	// TODO: check user part-------------
 	teamIdStr := c.Param(TeamIdParamName)
 	teamId, err := strconv.ParseUint(teamIdStr, 10, 64)
 	if err != nil {
@@ -63,7 +61,14 @@ func SetTeamAvatar(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Incorrect type of `%s` (should be uint64)", TeamIdParamName)})
 		return
 	}
-	// TODO: check user part------------
+
+	isUserMember := utils.CheckUserIsMemberOfTeam(userId, teamId)
+	if isUserMember == false {
+		responseStatus = http.StatusForbidden
+		responseBody = gin.H{"Detail": "Permission denied"}
+		c.JSON(http.StatusForbidden, gin.H{"Detail": "Permission denied"})
+		return
+	}
 
 	// save on disk
 	err = c.SaveUploadedFile(requestBody.Avatar, fullPathToSaveFile)
