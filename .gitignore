@@ -26,3 +26,7 @@ go.sum
 data
 
 .env
+
+# saved images
+images
+avatar_service

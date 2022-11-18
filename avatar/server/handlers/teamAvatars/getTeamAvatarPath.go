@@ -1,7 +1,7 @@
 package teamAvatars
 
 import (
-	"avatar.com/avatar/db"
+	"avatar.com/avatar/avatar/db"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"

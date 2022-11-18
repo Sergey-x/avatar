@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"avatar.com/avatar/db"
+	"avatar.com/avatar/avatar/db"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

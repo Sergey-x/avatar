@@ -1,9 +1,9 @@
 package usersAvatars
 
 import (
-	"avatar.com/avatar/db"
-	"avatar.com/avatar/server/schemas"
-	"avatar.com/avatar/server/utils"
+	"avatar.com/avatar/avatar/db"
+	"avatar.com/avatar/avatar/server/schemas"
+	"avatar.com/avatar/avatar/utils"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
