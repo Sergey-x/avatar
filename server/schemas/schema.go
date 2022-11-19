@@ -11,3 +11,7 @@ type SetAvatarRequestBody struct {
 type UsersIdsParam struct {
 	UsersIds string `form:"usersIds" binding:"required"`
 }
+
+type TeamsIdsParam struct {
+	TeamsIds string `form:"teamsIds" binding:"required"`
+}
