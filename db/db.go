@@ -1,7 +1,7 @@
 package db
 
 import (
-	"avatar.com/avatar/avatar/config"
+	"avatar.com/avatar/db/conf"
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
@@ -40,7 +40,7 @@ func initCreateTable(tableName string, query string) {
 }
 
 func init() {
-	openConn("postgres", config.ConnString)
+	openConn("postgres", conf.ConnString)
 	initCreateTable(UserAvatarTableName, "CREATE TABLE IF NOT EXISTS avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, user_id BIGINT UNIQUE, src_path TEXT);")
 	initCreateTable(TeamAvatarTableName, "CREATE TABLE IF NOT EXISTS team_avatar (id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY, team_id BIGINT UNIQUE, src_path TEXT);")
 }

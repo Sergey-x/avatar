@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"avatar.com/avatar/avatar/db"
-	"avatar.com/avatar/avatar/utils"
+	"avatar.com/avatar/db"
+	"avatar.com/avatar/server/utils"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

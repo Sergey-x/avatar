@@ -1,11 +1,9 @@
 package server
 
 import (
+	"avatar.com/avatar/server/conf"
 	"github.com/gin-gonic/gin"
 )
-
-// MaxAvatarMiBSize 4 MB
-const MaxAvatarMiBSize = 4
 
 func SetupServer() *gin.Engine {
 	r := gin.New()
@@ -17,7 +15,7 @@ func SetupServer() *gin.Engine {
 	r = setRoutes(r)
 
 	// Set a lower memory limit for multipart forms (override default 32 MB)
-	r.MaxMultipartMemory = MaxAvatarMiBSize << 20
+	r.MaxMultipartMemory = conf.MaxAvatarMiBSize << 20
 
 	return r
 }

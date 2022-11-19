@@ -1,16 +1,15 @@
 package main
 
 import (
-	"avatar.com/avatar/avatar/config"
-	"avatar.com/avatar/avatar/server"
-	"fmt"
+	"avatar.com/avatar/server"
+	"avatar.com/avatar/server/conf"
 	"log"
 )
 
 func main() {
 	r := server.SetupServer()
 
-	err := r.Run(fmt.Sprintf(":%s", config.ServiceAvatarPort))
+	err := r.Run(":" + conf.ServiceAvatarPort)
 	if err != nil {
 		log.Fatalln("Avatar server crashed")
 		return

@@ -1,19 +1,21 @@
-package handlers
+package teamAvatars
 
 import (
-	"avatar.com/avatar/avatar/config"
-	"avatar.com/avatar/avatar/db"
-	"avatar.com/avatar/avatar/server/schemas"
-	"avatar.com/avatar/avatar/utils"
+	"avatar.com/avatar/db"
+	"avatar.com/avatar/server/conf"
+	"avatar.com/avatar/server/schemas"
+	"avatar.com/avatar/server/utils"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	nanoid "github.com/matoous/go-nanoid/v2"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 )
 
-// SetAvatar Set user's avatar
-func SetAvatar(c *gin.Context) {
+// SetTeamAvatar Set team's avatar
+func SetTeamAvatar(c *gin.Context) {
 	responseStatus := http.StatusBadRequest
 	responseBody := gin.H{"error": "couldn't save image"}
 
@@ -37,7 +39,7 @@ func SetAvatar(c *gin.Context) {
 	}
 
 	dirPrefix := filename[0:2] + "/" + filename[2:4] + "/"
-	dirPath := config.BaseAvatarPath + "/" + dirPrefix
+	dirPath := conf.BaseAvatarPath + "/" + dirPrefix
 	err = os.MkdirAll(dirPath, os.ModePerm)
 	if err != nil {
 		log.Println(err.Error())
@@ -52,6 +54,22 @@ func SetAvatar(c *gin.Context) {
 		return
 	}
 
+	teamIdStr := c.Param(TeamIdParamName)
+	teamId, err := strconv.ParseUint(teamIdStr, 10, 64)
+	if err != nil {
+		log.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("Incorrect type of `%s` (should be uint64)", TeamIdParamName)})
+		return
+	}
+
+	isUserMember := utils.CheckUserIsMemberOfTeam(userId, teamId)
+	if isUserMember == false {
+		responseStatus = http.StatusForbidden
+		responseBody = gin.H{"Detail": "Permission denied"}
+		c.JSON(http.StatusForbidden, gin.H{"Detail": "Permission denied"})
+		return
+	}
+
 	// save on disk
 	err = c.SaveUploadedFile(requestBody.Avatar, fullPathToSaveFile)
 	if err != nil {
@@ -60,7 +78,7 @@ func SetAvatar(c *gin.Context) {
 	}
 
 	// save in db
-	err = db.SetSrcPath(userId, dirPrefix+filename)
+	err = db.SetTeamSrcPath(teamId, dirPrefix+filename)
 	if err != nil {
 		log.Println(err.Error())
 		return
