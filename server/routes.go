@@ -23,6 +23,7 @@ func setRoutes(router *gin.Engine) *gin.Engine {
 		v1.DELETE(teamAvatarsPrefix, teamAvatars.DeleteTeamAvatar)
 
 		v1.GET(usersAvatarsPrefix+"/list", usersAvatars.GetUsersAvatarsByIds)
+		v1.GET(usersAvatarsPrefix+"/list", teamAvatars.GetTeamsAvatarsByIds)
 	}
 
 	return router
