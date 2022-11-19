@@ -33,6 +33,6 @@ func GetUsersAvatarsByIds(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"detail": "Image not found"})
 		return
 	}
-	c.JSON(http.StatusNotFound, gin.H{"avatars": avatarsPaths})
+	c.JSON(http.StatusOK, gin.H{"avatars": avatarsPaths})
 	return
 }
