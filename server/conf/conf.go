@@ -6,6 +6,7 @@ import (
 )
 
 var BaseAvatarPath string = os.Getenv("AVATAR_IMAGES_DIR")
+var UserService string = os.Getenv("USER_SERVICE")
 
 const UserIdHeader = "X-User-Identity"
 
@@ -20,5 +21,8 @@ func init() {
 	}
 	if BaseAvatarPath == "" {
 		log.Fatal("environment variable `AVATAR_IMAGES_DIR` must be specified and must be non empty value")
+	}
+	if UserService == "" {
+		log.Fatal("environment variable `USER_SERVICE` must be specified and must be non empty value")
 	}
 }
