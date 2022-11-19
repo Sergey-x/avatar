@@ -66,7 +66,6 @@ func SetTeamAvatar(c *gin.Context) {
 	if isUserMember == false {
 		responseStatus = http.StatusForbidden
 		responseBody = gin.H{"Detail": "Permission denied"}
-		c.JSON(http.StatusForbidden, gin.H{"Detail": "Permission denied"})
 		return
 	}
 
@@ -85,5 +84,5 @@ func SetTeamAvatar(c *gin.Context) {
 	}
 
 	responseStatus = http.StatusOK
-	responseBody = gin.H{"avatarSrc": fullPathToSaveFile}
+	responseBody = gin.H{"srcPath": fullPathToSaveFile}
 }

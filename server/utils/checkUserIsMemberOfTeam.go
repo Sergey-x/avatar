@@ -15,7 +15,7 @@ type isMemberStruct struct {
 }
 
 func CheckUserIsMemberOfTeam(userId uint64, teamId uint64) bool {
-	requestURL := fmt.Sprintf("http://%s/schedule/team/%d/%d/isMember", conf.UserService, teamId, userId)
+	requestURL := fmt.Sprintf("http://%s/schedule/team/%d/%d/isMember", conf.ScheduleService, teamId, userId)
 
 	req, err := http.NewRequest(http.MethodGet, requestURL, nil)
 	if err != nil {
