@@ -17,10 +17,15 @@ func GetUsersAvatarsByIds(c *gin.Context) {
 	err := c.ShouldBindQuery(&usersIdsParam)
 	if err != nil {
 		log.Println("Bad users ids")
-		c.JSON(http.StatusNotFound, gin.H{"detail": "Bad users ids format"})
+		c.JSON(http.StatusBadRequest, gin.H{"detail": "Bad users ids format"})
 		return
 	}
 	usersIds := utils.StrToArrayInt(usersIdsParam.UsersIds)
+	if len(usersIds) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"detail": "No correct ids"})
+		return
+	}
+
 	avatarsPaths := db.GetUsersAvatarsByIds(usersIds)
 
 	if err != nil {
