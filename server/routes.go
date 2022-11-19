@@ -9,7 +9,7 @@ import (
 )
 
 func setRoutes(router *gin.Engine) *gin.Engine {
-	teamAvatarsPrefix := fmt.Sprintf("avatars/teams/:%s", teamAvatars.TeamIdParamName)
+	teamAvatarsPrefix := fmt.Sprintf("avatar/teams/:%s", teamAvatars.TeamIdParamName)
 	usersAvatarsPrefix := "/avatar"
 
 	v1 := router.Group("")
