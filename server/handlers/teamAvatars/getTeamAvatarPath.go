@@ -23,7 +23,7 @@ func GetTeamAvatarPath(c *gin.Context) {
 	srcPath, err := db.GetTeamSrcPath(teamId)
 	if err != nil {
 		log.Println(err.Error())
-		c.JSON(http.StatusNotFound, gin.H{"detail": "Image not found"})
+		c.JSON(http.StatusOK, gin.H{"srcPath": ""})
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"srcPath": srcPath})
