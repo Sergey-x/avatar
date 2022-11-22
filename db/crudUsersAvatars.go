@@ -16,8 +16,8 @@ type UserAvatar struct {
 func GetUsersAvatarsByIds(ids []int) (usersAvatars []UserAvatar) {
 	usersIds := strings.Trim(strings.Join(strings.Fields(fmt.Sprint(ids)), ","), "[]")
 	var unknownIds = map[int]bool{}
-	for _, userId := range usersIds {
-		unknownIds[int(userId)] = false
+	for _, userId := range ids {
+		unknownIds[userId] = false
 	}
 
 	rows, err := db.Query(fmt.Sprintf("SELECT user_id, src_path FROM %s WHERE user_id IN (%s);", UserAvatarTableName, usersIds))
@@ -45,10 +45,10 @@ func GetUsersAvatarsByIds(ids []int) (usersAvatars []UserAvatar) {
 		unknownIds[userAvatar.UserId] = true
 	}
 
-	for _, userId := range usersIds {
-		if unknownIds[int(userId)] == false {
+	for _, userId := range ids {
+		if unknownIds[userId] == false {
 			userAvatar := UserAvatar{}
-			userAvatar.UserId = int(userId)
+			userAvatar.UserId = userId
 			userAvatar.SrcPath = ""
 			if err != nil {
 				return nil
