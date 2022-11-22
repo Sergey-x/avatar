@@ -45,10 +45,10 @@ func GetUsersAvatarsByIds(ids []int) (usersAvatars []UserAvatar) {
 		unknownIds[userAvatar.UserId] = true
 	}
 
-	for userId, _ := range usersIds {
-		if unknownIds[userId] == false {
+	for _, userId := range usersIds {
+		if unknownIds[int(userId)] == false {
 			userAvatar := UserAvatar{}
-			userAvatar.UserId = userId
+			userAvatar.UserId = int(userId)
 			userAvatar.SrcPath = ""
 			if err != nil {
 				return nil
